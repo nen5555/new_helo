@@ -58,6 +58,7 @@ int main() {
     stack->push(2);
     stack->push(5);
     stack->push(4);
+    stack->push(6);
     cout << "栈 stack = ";
     printVector(stack->toVector());
 
