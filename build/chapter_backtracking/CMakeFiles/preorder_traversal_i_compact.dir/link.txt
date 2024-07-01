@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/preorder_traversal_i_compact.dir/preorder_traversal_i_compact.cpp.o -o preorder_traversal_i_compact 
