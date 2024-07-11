@@ -125,7 +125,12 @@ template<typename Func>
 
     }
 
-int main(){
+int main(int argc,char* argv[]){
+     if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <algorithm>" << std::endl;
+        return 1;
+    }
+    std::string algorithm = argv[1];
     std::vector<int> num;
     const std::string folderPath = "./images";
     if (!std::filesystem::exists(folderPath)) {
@@ -138,11 +143,22 @@ int main(){
     cout<<"num 初始化为 :";
     printArray(num.data(),num.size());
     
-    long long selectSortTime = measuretime([&search]() { search.bubble_Sort(); });
+    //long long selectSortTime = measuretime([&search]() { search.bubble_Sort(); });
+    long long sortTime;
+    if (algorithm == "select") {
+        sortTime = measuretime([&search]() { search.select_Sort(); });
+        std::cout << "num 经过 select_sort 为: ";
+    } else if (algorithm == "bubble") {
+        sortTime = measuretime([&search]() { search.bubble_Sort(); });
+        std::cout << "num 经过 bubble_sort 为: ";
+    } else {
+        std::cerr << "Unknown algorithm: " << algorithm << std::endl;
+        return 1;
+    }
     cout << "num 经过bubble_sort为 :";
     printArray(num.data(), num.size());
-    cout << "选择排序耗时: " << selectSortTime << " 微秒" << endl;
-    search.createGIF("output.gif", "bubbleSort");
+    cout << "选择排序耗时: " << sortTime << " 微秒" << endl;
+    search.createGIF("output.gif", algorithm);
   
 }
 
