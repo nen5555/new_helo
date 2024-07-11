@@ -8,6 +8,6 @@
 *.dSYM/
 
 build/
+chapter_searching/build/images/
 
-!build/build/
-!build/build/image**
+chapter_searching/build/images/**
