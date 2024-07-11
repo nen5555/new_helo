@@ -32,6 +32,6 @@ make -j 8
 
 ## Run the visualization
 ### Selection Sort
-![](./img/SelectSort_output.gif)
+![](./img/select_output.gif)
 ### Bubble Sorting
-![](./img/bubbleSort_output.gif)
+![](./img/bubble_output.gif)
