@@ -9,6 +9,7 @@ find_package(OpenCV REQUIRED core imgproc highgui)
 
 # 添加可执行文件
 add_executable(demo demo.cpp)
+add_executable(sort_algrm sort_algrm.cpp)
 
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 11)
@@ -16,8 +17,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # 包含OpenCV头文件
 target_include_directories(demo PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_include_directories(sort_algrm PRIVATE ${OpenCV_INCLUDE_DIRS})
 
 # 链接OpenCV库
 target_link_libraries(demo PRIVATE ${OpenCV_LIBS})
+target_link_libraries(sort_algrm PRIVATE ${OpenCV_LIBS})
+
+
 
 

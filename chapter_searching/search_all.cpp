@@ -52,16 +52,33 @@ public:
         int step=0;
         auto start = std::chrono::high_resolution_clock::now();
         saveState(step++,0);
-        for(int i=0;i<num.size()-2;i++){   
-            for(int j=i;j<num.size()-1;j++){
+        for(int i=num.size()-1;i>0;i--){   
+            for(int j=0;j<i;j++){
                 if(num[j]>num[j+1])
                 swap(num[j],num[j+1]);
-                 auto end = std::chrono::high_resolution_clock::now();
+                auto end = std::chrono::high_resolution_clock::now();
                 long long elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             saveState(step++,elapsedTime,j,j+1);
             }
         }
     }
+    void insert_Sort(){
+        int step=0;
+        auto start = std::chrono::high_resolution_clock::now();
+        saveState(step++,0);
+        for(int i=1;i<num.size();i++){
+            int base=num[i],j=i-1;
+            while(j>=0 && num[j]>base){
+                num[j+1]=num[j];
+                j--;
+            }
+            num[j+1]=base;
+            auto end = std::chrono::high_resolution_clock::now();
+                long long elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            saveState(step++,elapsedTime,j,j+1);
+        }
+    }
+
     void drawVectorAsImage(const std::string& filename,int step,long long elapsedTime,  int highlightIndex1 = -1, int highlightIndex2 = -1, int barwidth=10,int spacing=5) {
     // 确定图像的宽度和高度
     int width = num.size() * (barwidth+spacing)+spacing; // 每个条形图的宽度为10个像素
@@ -151,6 +168,9 @@ int main(int argc,char* argv[]){
     } else if (algorithm == "bubble") {
         sortTime = measuretime([&search]() { search.bubble_Sort(); });
         std::cout << "num 经过 bubble_sort 为: ";
+    } else if (algorithm == "insert") {
+        sortTime = measuretime([&search]() { search.insert_Sort(); });
+        std::cout << "num 经过 insert_sort 为: ";
     } else {
         std::cerr << "Unknown algorithm: " << algorithm << std::endl;
         return 1;
