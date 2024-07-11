@@ -9,5 +9,5 @@
 
 build/
 
-!build/images/
-!build/images/**
+!build/build/
+!build/build/image**
