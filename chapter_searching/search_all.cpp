@@ -49,10 +49,16 @@ public:
         }
     }
     void bubble_Sort(){
+        int step=0;
+        auto start = std::chrono::high_resolution_clock::now();
+        saveState(step++,0);
         for(int i=0;i<num.size()-2;i++){   
             for(int j=i;j<num.size()-1;j++){
                 if(num[j]>num[j+1])
                 swap(num[j],num[j+1]);
+                 auto end = std::chrono::high_resolution_clock::now();
+                long long elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            saveState(step++,elapsedTime,j,j+1);
             }
         }
     }
@@ -132,11 +138,11 @@ int main(){
     cout<<"num 初始化为 :";
     printArray(num.data(),num.size());
     
-    long long selectSortTime = measuretime([&search]() { search.select_Sort(); });
-    cout << "num 经过select_sort为 :";
+    long long selectSortTime = measuretime([&search]() { search.bubble_Sort(); });
+    cout << "num 经过bubble_sort为 :";
     printArray(num.data(), num.size());
     cout << "选择排序耗时: " << selectSortTime << " 微秒" << endl;
-    search.createGIF("output.gif", "SelectSort");
+    search.createGIF("output.gif", "bubbleSort");
   
 }
 
