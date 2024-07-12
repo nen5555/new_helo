@@ -30,7 +30,7 @@ public:
             }
         }
     }
-    std::string getName() const override { return "selection"; }
+    std::string getName() const override { return "select"; }
 };
 
 // 冒泡排序
@@ -68,7 +68,7 @@ public:
             nums[j + 1] = key;
         }
     }
-    std::string getName() const override { return "insertion"; }
+    std::string getName() const override { return "insert"; }
 };
 
 class Search {
@@ -188,7 +188,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::vector<int> num;
-    const std::string folderPath = "./images";
+    const std::string folderPath = "build/images";
     if (!fs::exists(folderPath)) {
         fs::create_directory(folderPath);
     }

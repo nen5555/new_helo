@@ -44,8 +44,7 @@ void generateAndStreamImage(const std::string& streamUrl, const cv::Scalar& colo
 int main() {
     // Use the WSL2 IP address here
     std::string wslIp = "127.0.0.1";  // Replace with your actual WSL2 IP
-    std::string baseUrl = "rtsp://" + wslIp + ":9554/live/";
-    
+    std::string baseUrl = "rtsp://" + wslIp + ":9554/live";
     // Start a thread to generate and stream image with grey color
     std::thread threadGray(generateAndStreamImage, baseUrl + "white", cv::Scalar(127, 127, 127));
     
