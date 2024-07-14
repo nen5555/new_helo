@@ -9,17 +9,7 @@
 
 namespace fs = std::filesystem;
 
-// Function to generate image and stream it via RTSP
-void generateAndStreamImage(const std::string& streamUrl, const cv::Scalar& color) {
-    // Create an image with the specified color, size 400x400 pixels
-    cv::Mat image(400, 400, CV_8UC3, color);
-    
-    if (image.empty()) {
-        std::cerr << "Failed to create image!" << std::endl;
-        return;
-    }
-    
-    // Prepare FFmpeg command for streaming
+void streamColor(const std::string& streamUrl, const std::vector<cv::Scalar>& colors, int duration) {
     std::string ffmpegCmd = "ffmpeg -re -f rawvideo -pix_fmt bgr24 -s 400x400 "
                             "-i pipe:0 -c:v libx264 -preset ultrafast -f rtsp " + streamUrl;
     
@@ -28,28 +18,37 @@ void generateAndStreamImage(const std::string& streamUrl, const cv::Scalar& colo
         std::cerr << "Failed to open pipe to FFmpeg!" << std::endl;
         return;
     }
-    
-    // Stream the image for 10 seconds
-    for (int i = 0; i < 300; ++i) {  // 30 fps * 10 seconds
+
+    int colorIndex = 0;
+    int numColors = colors.size();
+    for (int i = 0; i < duration * 30; ++i) {  // 30 fps * duration seconds
+        cv::Mat image(400, 400, CV_8UC3, colors[colorIndex]);
         fwrite(image.data, 1, image.total() * image.elemSize(), ffmpegPipe);
         fflush(ffmpegPipe);
+
+        colorIndex = (colorIndex + 1) % numColors;
         std::this_thread::sleep_for(std::chrono::milliseconds(33));  // ~30 fps
     }
-    
+
     pclose(ffmpegPipe);
-    
     std::cout << "Finished streaming " << streamUrl << std::endl;
 }
 
+void generateAndStreamImages(const std::string& baseUrl) {
+    std::vector<cv::Scalar> colors = {cv::Scalar(0, 0, 0), cv::Scalar(127, 127, 127), cv::Scalar(255, 255, 255)};
+    int duration = 10;  // Stream duration in seconds
+
+    std::thread streamThread1(streamColor, baseUrl + "white", colors, duration);
+
+    streamThread1.join();
+}
+
 int main() {
-    // Use the WSL2 IP address here
     std::string wslIp = "127.0.0.1";  // Replace with your actual WSL2 IP
-    std::string baseUrl = "rtsp://" + wslIp + ":9554/live";
-    // Start a thread to generate and stream image with grey color
-    std::thread threadGray(generateAndStreamImage, baseUrl + "white", cv::Scalar(127, 127, 127));
-    
-    // Wait for the thread to complete
-    threadGray.join();
-    
+    std::string baseUrl = "rtsp://" + wslIp + ":9554/live/";
+    std::cout<<baseUrl+"white"<<std::endl;
+
+    generateAndStreamImages(baseUrl);
+
     return 0;
 }
